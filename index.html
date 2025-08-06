@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Serviços - Fanstore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom animation for slide-in effect */
+        .slide-in {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        /* Fade-in for form container */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4f46e5;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Input focus border animation */
+        input:focus, textarea:focus, select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl fade-in">
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Formulário de Solicitação de Serviços</h1>
+        <form id="serviceForm" action="/submit" method="POST" class="space-y-6">
+            <!-- Company Name -->
+            <div>
+                <label for="companyName" class="block text-sm font-medium text-gray-700">Nome da Empresa/Marca</label>
+                <input type="text" id="companyName" name="companyName" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Nome da sua empresa ou marca" required aria-describedby="companyName-error">
+                <p id="companyName-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, insira o nome da empresa ou marca.</p>
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+                <input type="email" id="email" name="email" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Seu e-mail" required aria-describedby="email-error">
+                <p id="email-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, insira um e-mail válido.</p>
+            </div>
+
+            <!-- Preferred Contact Method -->
+            <div>
+                <label for="contactMethod" class="block text-sm font-medium text-gray-700">Método de Contato Preferido</label>
+                <select id="contactMethod" name="contactMethod" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required aria-describedby="contactMethod-error">
+                    <option value="" disabled selected>Selecione um método</option>
+                    <option value="email">E-mail</option>
+                    <option value="phone">Telefone</option>
+                    <option value="other">Outro</option>
+                </select>
+                <p id="contactMethod-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, selecione um método de contato.</p>
+            </div>
+
+            <!-- Phone Number (Optional, shown if contact method is phone) -->
+            <div id="phoneField" class="hidden">
+                <label for="phone" class="block text-sm font-medium text-gray-700">Telefone</label>
+                <input type="tel" id="phone" name="phone" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Seu telefone (opcional)" aria-describedby="phone-error">
+                <p id="phone-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, insira um número de telefone válido.</p>
+            </div>
+
+            <!-- Primary Service Selection -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2" id="primary-label">Categorias de Serviços</label>
+                <div class="space-y-3" aria-labelledby="primary-label">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="campanhas" name="primaryServices" value="campanhas" class="h-5 w-5 text-indigo-600 border-gray-300 rounded-full focus:ring-indigo-500 transition-transform duration-200 hover:scale-110">
+                        <label for="campanhas" class="ml-3 text-sm text-gray-700">Campanhas e Comunicação</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="conteudo" name="primaryServices" value="conteudo" class="h-5 w-5 text-indigo-600 border-gray-300 rounded-full focus:ring-indigo-500 transition-transform duration-200 hover:scale-110">
+                        <label for="conteudo" class="ml-3 text-sm text-gray-700">Conteúdo e Produção Visual</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="logistica" name="primaryServices" value="logistica" class="h-5 w-5 text-indigo-600 border-gray-300 rounded-full focus:ring-indigo-500 transition-transform duration-200 hover:scale-110">
+                        <label for="logistica" class="ml-3 text-sm text-gray-700">Logística e Operações</label>
+                    </div>
+                </div>
+                <p id="primaryError" class="text-red-500 text-sm hidden mt-2 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, selecione pelo menos uma categoria de serviço.</p>
+            </div>
+
+            <!-- Secondary Services (Dynamic) -->
+            <div id="secondaryServices" class="hidden space-y-4">
+                <label class="block text-sm font-medium text-gray-700" id="secondary-label">Serviços/Produtos</label>
+                <div id="secondaryOptions" class="space-y-3" aria-labelledby="secondary-label">
+                    <!-- Checkboxes will be populated by JavaScript -->
+                </div>
+                <p id="secondaryError" class="text-red-500 text-sm hidden opacity-0 transition-opacity duration-300" aria-live="polite"></p>
+            </div>
+
+            <!-- Target Audience -->
+            <div>
+                <label for="targetAudience" class="block text-sm font-medium text-gray-700">Público-Alvo</label>
+                <textarea id="targetAudience" name="targetAudience" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Descreva seu público-alvo (ex.: idade, interesses, localização)" required aria-describedby="targetAudience-error"></textarea>
+                <p id="targetAudience-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, descreva o público-alvo.</p>
+            </div>
+
+            <!-- Brand Values -->
+            <div>
+                <label for="brandValues" class="block text-sm font-medium text-gray-700">Valores da Marca</label>
+                <textarea id="brandValues" name="brandValues" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Quais são os valores ou missão da sua marca? (ex.: sustentabilidade, inovação)" required aria-describedby="brandValues-error"></textarea>
+                <p id="brandValues-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, descreva os valores da marca.</p>
+            </div>
+
+            <!-- Current Marketing Strategies -->
+            <div>
+                <label for="marketingStrategies" class="block text-sm font-medium text-gray-700">Estratégias de Marketing Atuais</label>
+                <textarea id="marketingStrategies" name="marketingStrategies" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Quais estratégias de marketing você usa atualmente? (ex.: redes sociais, anúncios)" required aria-describedby="marketingStrategies-error"></textarea>
+                <p id="marketingStrategies-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, descreva suas estratégias de marketing atuais.</p>
+            </div>
+
+            <!-- Project Goals -->
+            <div>
+                <label for="projectGoals" class="block text-sm font-medium text-gray-700">Objetivos do Projeto</label>
+                <textarea id="projectGoals" name="projectGoals" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Quais são os objetivos deste projeto? (ex.: aumentar vendas, reconhecimento de marca)" required aria-describedby="projectGoals-error"></textarea>
+                <p id="projectGoals-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, descreva os objetivos do projeto.</p>
+            </div>
+
+            <!-- Brand Details (Original Textarea) -->
+            <div>
+                <label for="brandDetails" class="block text-sm font-medium text-gray-700">Detalhes Adicionais da Marca</label>
+                <textarea id="brandDetails" name="brandDetails" rows="6" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Descreva mais detalhes sobre sua marca e suas necessidades..." required aria-describedby="brandDetails-error"></textarea>
+                <p id="brandDetails-error" class="text-red-500 text-sm hidden mt-1 opacity-0 transition-opacity duration-300" aria-live="polite">Por favor, descreva os detalhes adicionais da marca.</p>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" id="submitButton" class="w-full bg-indigo-600 text-white p-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200 flex items-center justify-center">
+                    <span id="buttonText">Enviar Solicitação</span>
+                    <span id="spinner" class="spinner"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const serviceData = {
+            campanhas: [
+                "Conteúdo para redes vinculado a produtos",
+                "Criação de catálogos"
+            ],
+            conteudo: [
+                "Casting de modelos",
+                "Fotografia de produtos",
+                "Tratamento de imagens",
+                "Locação de cenário"
+            ],
+            logistica: [
+                "Entrega padrão",
+                "Coordenação e envio de kits",
+                "Manuseio de produtos",
+                "Logística B2C"
+            ]
+        };
+
+        const primaryCheckboxes = document.querySelectorAll('input[name="primaryServices"]');
+        const secondaryOptionsDiv = document.getElementById('secondaryOptions');
+        const secondaryServicesDiv = document.getElementById('secondaryServices');
+        const primaryError = document.getElementById('primaryError');
+        const secondaryError = document.getElementById('secondaryError');
+        const form = document.getElementById('serviceForm');
+        const submitButton = document.getElementById('submitButton');
+        const buttonText = document.getElementById('buttonText');
+        const spinner = document.getElementById('spinner');
+        const contactMethodSelect = document.getElementById('contactMethod');
+        const phoneField = document.getElementById('phoneField');
+
+        // Show/hide phone field based on contact method
+        contactMethodSelect.addEventListener('change', () => {
+            phoneField.classList.toggle('hidden', contactMethodSelect.value !== 'phone');
+        });
+
+        // Update secondary services based on primary selections
+        primaryCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const selectedPrimary = Array.from(primaryCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
+
+                secondaryOptionsDiv.innerHTML = ''; // Clear previous options
+                if (selectedPrimary.length > 0) {
+                    secondaryServicesDiv.classList.remove('hidden');
+                    selectedPrimary.forEach((primary, index) => {
+                        const groupDiv = document.createElement('div');
+                        groupDiv.className = 'mt-4 slide-in';
+                        groupDiv.style.animationDelay = `${index * 0.1}s`;
+                        groupDiv.innerHTML = `<h3 class="text-sm font-medium text-gray-700">${
+                            primary === 'campanhas' ? 'Campanhas e Comunicação' :
+                            primary === 'conteudo' ? 'Conteúdo e Produção Visual' :
+                            'Logística e Operações'
+                        }</h3>`;
+                        serviceData[primary].forEach((service, serviceIndex) => {
+                            const checkboxDiv = document.createElement('div');
+                            checkboxDiv.className = 'flex items-center slide-in';
+                            checkboxDiv.style.animationDelay = `${(index * serviceData[primary].length + serviceIndex) * 0.1}s`;
+                            checkboxDiv.innerHTML = `
+                                <input type="checkbox" id="${primary}_${serviceIndex}" name="secondaryServices_${primary}" value="${service}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 transition-transform duration-200 hover:scale-110">
+                                <label for="${primary}_${serviceIndex}" class="ml-2 text-sm text-gray-700">${service}</label>
+                            `;
+                            groupDiv.appendChild(checkboxDiv);
+                        });
+                        secondaryOptionsDiv.appendChild(groupDiv);
+                    });
+                } else {
+                    secondaryServicesDiv.classList.add('hidden');
+                }
+            });
+        });
+
+        // Form validation and submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputs = {
+                companyName: document.getElementById('companyName'),
+                email: document.getElementById('email'),
+                contactMethod: document.getElementById('contactMethod'),
+                phone: document.getElementById('phone'),
+                targetAudience: document.getElementById('targetAudience'),
+                brandValues: document.getElementById('brandValues'),
+                marketingStrategies: document.getElementById('marketingStrategies'),
+                projectGoals: document.getElementById('projectGoals'),
+                brandDetails: document.getElementById('brandDetails')
+            };
+            let valid = true;
+
+            // Validate company name
+            if (!inputs.companyName.value.trim()) {
+                document.getElementById('companyName-error').classList.remove('hidden');
+                document.getElementById('companyName-error').style.opacity = '1';
+                valid = false;
+            } else {
+                document.getElementById('companyName-error').classList.add('hidden');
+            }
+
+            // Validate email
+            if (!inputs.email.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                document.getElementById('email-error').classList.remove('hidden');
+                document.getElementById('email-error').style.opacity = '1';
+                valid = false;
+            } else {
+                document.getElementById('email-error').classList.add('hidden');
+            }
+
+            // Validate contact method
+            if (!inputs.contactMethod.value) {
+                document.getElementById('contactMethod-error').classList.remove('hidden');
+                document.getElementById('contactMethod-error').style.opacity = '1';
+                valid = false;
+            } else {
+                document.getElementById('contactMethod-error').classList.add('hidden');
+            }
+
+            // Validate phone if contact method is phone
+            if (inputs.contactMethod.value === 'phone' && !inputs.phone.value.match(/^\+?[\d\s-]{8,}$/)) {
+                document.getElementById('phone-error').classList.remove('hidden');
+                document.getElementById('phone-error').style.opacity = '1';
+                valid = false;
+            } else {
+                document.getElementById('phone-error').classList.add('hidden');
+            }
+
+            // Validate primary services
+            const selectedPrimary = Array.from(primaryCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+            if (selectedPrimary.length === 0) {
+                primaryError.classList.remove('hidden');
+                primaryError.style.opacity = '1';
+                valid = false;
+            } else {
+                primaryError.classList.add('hidden');
+            }
+
+            // Validate secondary services
+            let missingCategories = [];
+            selectedPrimary.forEach(primary => {
+                const secondaryCheckboxes = document.querySelectorAll(`input[name="secondaryServices_${primary}"]:checked`);
+                if (secondaryCheckboxes.length === 0) {
+                    missingCategories.push(
+                        primary === 'campanhas' ? 'Campanhas e Comunicação' :
+                        primary === 'conteudo' ? 'Conteúdo e Produção Visual' :
+                        'Logística e Operações'
+                    );
+                }
+            });
+            if (missingCategories.length > 0) {
+                secondaryError.textContent = `Por favor, selecione pelo menos um serviço/produto para: ${missingCategories.join(', ')}.`;
+                secondaryError.classList.remove('hidden');
+                secondaryError.style.opacity = '1';
+                valid = false;
+            } else {
+                secondaryError.classList.add('hidden');
+            }
+
+            // Validate textareas
+            ['targetAudience', 'brandValues', 'marketingStrategies', 'projectGoals', 'brandDetails'].forEach(field => {
+                if (!inputs[field].value.trim()) {
+                    document.getElementById(`${field}-error`).classList.remove('hidden');
+                    document.getElementById(`${field}-error`).style.opacity = '1';
+                    valid = false;
+                } else {
+                    document.getElementById(`${field}-error`).classList.add('hidden');
+                }
+            });
+
+            if (!valid) return;
+
+            // Simulate form submission
+            buttonText.textContent = 'Enviando...';
+            spinner.style.display = 'inline-block';
+            submitButton.disabled = true;
+
+            setTimeout(() => {
+                console.log('Form Data:', {
+                    companyName: inputs.companyName.value,
+                    email: inputs.email.value,
+                    contactMethod: inputs.contactMethod.value,
+                    phone: inputs.phone.value,
+                    primaryServices: selectedPrimary,
+                    ...selectedPrimary.reduce((acc, primary) => {
+                        acc[`secondaryServices_${primary}`] = Array.from(
+                            document.querySelectorAll(`input[name="secondaryServices_${primary}"]:checked`)
+                        ).map(cb => cb.value);
+                        return acc;
+                    }, {}),
+                    targetAudience: inputs.targetAudience.value,
+                    brandValues: inputs.brandValues.value,
+                    marketingStrategies: inputs.marketingStrategies.value,
+                    projectGoals: inputs.projectGoals.value,
+                    brandDetails: inputs.brandDetails.value
+                });
+                buttonText.textContent = 'Enviado!';
+                spinner.style.display = 'none';
+                setTimeout(() => {
+                    buttonText.textContent = 'Enviar Solicitação';
+                    submitButton.disabled = false;
+                    form.reset();
+                    secondaryServicesDiv.classList.add('hidden');
+                    phoneField.classList.add('hidden');
+                }, 2000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
