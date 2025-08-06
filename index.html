@@ -53,7 +53,7 @@
 </head>
 <body class="bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl fade-in">
-        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Formulário de Solicitação de Serviços</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Formulário</h1>
         <form id="serviceForm" action="/submit" method="POST" class="space-y-6">
             <!-- Company Name -->
             <div>
@@ -212,7 +212,6 @@
                     selectedPrimary.forEach((primary, index) => {
                         const groupDiv = document.createElement('div');
                         groupDiv.className = 'mt-4 slide-in';
-                        groupDiv.style.animationDelay = `${index * 0.1}s`;
                         groupDiv.innerHTML = `<h3 class="text-sm font-medium text-gray-700">${
                             primary === 'campanhas' ? 'Campanhas e Comunicação' :
                             primary === 'conteudo' ? 'Conteúdo e Produção Visual' :
@@ -221,7 +220,6 @@
                         serviceData[primary].forEach((service, serviceIndex) => {
                             const checkboxDiv = document.createElement('div');
                             checkboxDiv.className = 'flex items-center slide-in';
-                            checkboxDiv.style.animationDelay = `${(index * serviceData[primary].length + serviceIndex) * 0.1}s`;
                             checkboxDiv.innerHTML = `
                                 <input type="checkbox" id="${primary}_${serviceIndex}" name="secondaryServices_${primary}" value="${service}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 transition-transform duration-200 hover:scale-110">
                                 <label for="${primary}_${serviceIndex}" class="ml-2 text-sm text-gray-700">${service}</label>
